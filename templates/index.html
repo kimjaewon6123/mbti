@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MBTI 채팅 사이트</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+    <style>
+      body {
+        background-color: #fff;
+        margin: 0;
+        padding: 0;
+        font-family: 'Pretendard', 'Inter', 'Segoe UI', sans-serif;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        max-width: 400px;
+        margin: 0 auto;
+        gap: 32px;
+        background-color: #fff;
+      }
+
+      .chat-container img {
+        width: 160px;
+        height: auto;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .enter-button-container {
+        width: 100%;
+      }
+
+      .enter-button {
+        display: flex;
+      justify-content: center;
+      align-items: center;
+      text-decoration: none;
+      background-color: #FDDBA6;
+      color: #211816;
+      padding: 14px 32px;
+      border-radius: 40px;
+      font-size: 16px;
+      font-weight: 500;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.2s ease, transform 0.1s ease;
+      width: 61%;
+      margin-top: 10px;
+      text-align: center;
+      margin: auto;
+      }
+
+      .enter-button:hover {
+        background-color: #F8C472;
+      }
+
+      .enter-button:active {
+        background-color: #4338ca;
+        transform: scale(0.97);
+      }
+
+      .index-img {
+        width: 45%;
+        display: block;
+        margin: 0 auto;
+      }
+      .index-text {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #211816;
+        text-align: center;
+      }
+
+      @keyframes fadeInUp {
+        0% { opacity: 0; transform: translateY(40px) scale(0.98); }
+        100% { opacity: 1; transform: translateY(0) scale(1); }
+      }
+      @keyframes fadeInScale {
+        0% { opacity: 0; transform: scale(0.85); }
+        100% { opacity: 1; transform: scale(1); }
+      }
+      .fadein-up { animation: fadeInUp 1.1s cubic-bezier(.23,1.01,.32,1) 0.4s both; }
+      .fadein-scale { animation: fadeInScale 1.1s cubic-bezier(.23,1.01,.32,1) 0.2s both; }
+    </style>
+  </head>
+  <body>
+    <div class="container" style="position:absolute; width:375px; height:100vh; top:50%; left:50%; transform:translate(-50%,-50%); overflow:hidden;">
+      <div style="position: absolute; left: -60px; top: 10px; z-index:0; opacity:0.18;">
+        <svg width="120" height="120"><circle cx="60" cy="60" r="60" fill="#ffe6c7"></circle></svg>
+      </div>
+      <div style="position: absolute; right: -40px; bottom: 30px; z-index:0; opacity:0.13;">
+        <svg width="80" height="80"><circle cx="40" cy="40" r="40" fill="#fddbaf"></circle></svg>
+      </div>
+      <div style="position: relative; z-index:1; width:100%; display:flex; flex-direction:column; align-items:center;">
+        <img class="index-img fadein-scale" src="/static/img/MBTI.png" alt="예시 이미지" style="animation: fadeInScale 1.1s cubic-bezier(.23,1.01,.32,1) 0.2s both;">
+        <p class="index-text fadein-up" style="font-size:1.18rem; font-weight:700; color:#ff9900; line-height:1.6; letter-spacing:-0.5px; margin-top:24px; animation: fadeInUp 1.1s cubic-bezier(.23,1.01,.32,1) 0.4s both;">
+          <span style="font-size:1.5em; vertical-align:middle;"></span> <strong style="color:#211816; font-size:1.25rem; font-weight:800;">16가지 MBTI 친구들</strong>이 기다리고 있어요.<br>
+          <span style="color:#211816; font-weight:600;">당신은 누구와 대화해볼래요?</span>
+        </p>
+        <div class="enter-button-container" style="width:100%;">
+          <a class="enter-button fadein-scale" href="/select" style="animation: fadeInScale 1.1s cubic-bezier(.23,1.01,.32,1) 0.7s both; font-size:17px; font-weight:600; box-shadow:0 4px 16px rgba(0,0,0,0.13); width:65%; margin:18px auto 0 auto;">챗봇 시작하기</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

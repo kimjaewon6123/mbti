@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>MBTI 채팅 사이트</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"
+    />
+    <style>
+      body {
+        background-color: #fff;
+        margin: 0;
+        padding: 0;
+        font-family: "Pretendard", "Inter", "Segoe UI", sans-serif;
+        overflow: hidden;
+      }
+      /* 채팅 전체 컨테이너 */
+      .chat-container {
+        display: flex;
+        flex-direction: column;
+        width: 375px;
+        height: 100vh;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #fff;
+        overflow: hidden;
+        border: 1.5px solid #f0f0f0;
+        min-width: unset;
+        max-width: unset;
+        margin: 0;
+      }
+      /* 상단 헤더 스타일 */
+      .chat-header {
+        width: 375px;
+        min-width: 375px;
+        max-width: 375px;
+        margin: 0 auto;
+        background: linear-gradient(90deg, #fddbaf 60%, #ffe6c7 100%);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+        text-align: center;
+        min-height: 48px;
+        line-height: 1.2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        padding: 0;
+      }
+      .chat-header-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        margin-right: 10px;
+        background: #fff;
+        object-fit: contain;
+        border: 1.5px solid #f0f0f0;
+      }
+      .chat-header-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .chat-header h6 {
+        font-size: 1.6rem;
+        margin: 0;
+        font-family: "Pretendard", "Inter", "Segoe UI", sans-serif;
+        font-weight: 700;
+        color: #211816;
+      }
+      /* 메시지 영역 스타일 */
+      .chat-messages {
+        flex: 1;
+        padding: 24px 18px;
+        overflow-y: auto;
+        display: flex;
+        gap: 1.2rem;
+        flex-direction: column;
+        background: none;
+        margin: 0;
+      }
+      /* 입력 영역 스타일 */
+      .chat-input {
+        width: 375px;
+        min-width: 375px;
+        max-width: 375px;
+        padding: 18px 18px 18px 18px;
+        border-top: 1.5px solid #f0f0f0;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        margin: 0 auto;
+        box-sizing: border-box;
+      }
+      .chat-input form {
+        display: flex;
+        position: relative;
+        flex: 1;
+        width: 100%;
+      }
+      .chat-input textarea {
+        flex: 1;
+        padding: 13px 16px;
+        border-radius: 25px;
+        font-size: 1rem;
+        border: 1.5px solid #e0e0e0;
+        outline: none;
+        background: #fff;
+        transition: box-shadow 0.2s, border 0.2s;
+        font-family: "Pretendard", "Inter", "Segoe UI", sans-serif;
+        min-height: 36px;
+        max-height: 90px;
+        resize: none;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-right: 24px;
+        box-sizing: border-box;
+        scrollbar-width: thin;
+        scrollbar-color: #fddbaf transparent;
+      }
+      .chat-input textarea::-webkit-scrollbar {
+        width: 2px;
+        background: transparent;
+      }
+      .chat-input textarea::-webkit-scrollbar-thumb {
+        background: #fddbaf;
+        border-radius: 1px;
+      }
+      .chat-input textarea::-webkit-scrollbar-track {
+        background: transparent;
+        margin: 6px 0;
+      }
+      .chat-input button {
+        width: 28px;
+        height: 28px;
+        border: none;
+        border-radius: 50%;
+        background-color: #fddbaf;
+        color: #211816;
+        cursor: pointer;
+        margin-left: 10px;
+        font-size: 1rem;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.15s, color 0.15s;
+      }
+      .chat-input button:hover {
+        background: #f8c472;
+        color: #fff;
+      }
+      .chat-input .image-upload {
+        display: flex;
+        align-items: center;
+        margin-right: 10px;
+      }
+      .chat-input .image-upload input[type="file"] {
+        display: none;
+      }
+      .chat-input .image-upload label {
+        cursor: pointer;
+        font-size: 1.3rem;
+        color: #f8c472;
+        padding: 6px 8px;
+        border-radius: 8px;
+        transition: background 0.15s;
+      }
+      .chat-input .image-upload label:hover {
+        background: #fdf6e3;
+      }
+      .typing-indicator {
+        display: inline-block;
+        margin-left: 8px;
+        font-size: 1.2em;
+        color: #bdbdbd;
+        letter-spacing: 2px;
+        vertical-align: middle;
+        animation: blink 1.2s infinite;
+      }
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.3;
+        }
+      }
+      img {
+        width: 49px;
+        height: 52px;
+        border-radius: 50%;
+      }
+      img.avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+      /* 내가 보낸 메시지 스타일 */
+      .sent-box {
+        align-self: flex-end;
+        display: flex;
+        flex-direction: row-reverse;
+        gap: 0.4rem;
+        align-items: flex-end;
+        max-width: 80%;
+        position: relative;
+      }
+      .sent {
+        background-color: #f8c472;
+        color: #211816;
+        text-align: left;
+        padding: 1rem 2rem 1.3rem 2rem;
+        border-radius: 24px 8px 32px 32px;
+        font-size: 0.84rem;
+        box-shadow: 0 2px 12px #f8c47233;
+        position: relative;
+        margin-right: 8px;
+      }
+      .sent-time {
+        font-size: 0.75em;
+        color: #bdbdbd;
+        margin-right: 2px;
+        margin-top: 6px;
+        align-self: flex-end;
+      }
+      /* 받은 메시지 스타일 */
+      .received-box {
+        align-self: flex-start;
+        display: flex;
+        flex-direction: row;
+        gap: 0.4rem;
+        align-items: flex-start;
+        max-width: 95%;
+        position: relative;
+      }
+      .received {
+        background-color: #f0f0f0;
+        text-align: left;
+        padding: 0.8rem 1.6rem 1.18rem 1.6rem;
+        border-radius: 8px 24px 32px 32px;
+        font-size: 0.84rem;
+        box-shadow: 0 2px 12px #bdbdbd1a;
+        position: relative;
+        margin-left: 8px;
+        display: inline-block;
+      }
+      .received-time {
+        font-size: 0.75em;
+        color: #bdbdbd;
+        margin-left: 2px;
+        margin-top: 0;
+        align-self: flex-end;
+        text-align: right;
+        float: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="chat-container">
+      <div class="chat-header" style="position: relative">
+        <button
+          onclick="window.location.href='/select'"
+          style="
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            color: #211816;
+            font-family: 'Pretendard', 'Inter', 'Segoe UI', sans-serif;
+            padding: 4px 10px;
+            border-radius: 8px;
+            transition: background 0.15s;
+          "
+        >
+          ←
+        </button>
+        <div class="chat-header-title">
+          <h6 id="chatTitle">챗봇</h6>
+        </div>
+      </div>
+      <div class="chat-messages" id="messages"></div>
+      <div class="chat-input">
+        <div class="image-upload">
+          <label for="imageInput"><i class="fas fa-image"></i></label>
+          <input type="file" id="imageInput" accept="image/*" />
+        </div>
+        <form id="chatForm" action="" style="display: flex; flex: 1; align-items: center;">
+          <textarea
+            id="messageText"
+            autocomplete="off"
+            placeholder="메시지를 입력해주세요!"
+            style="flex: 1; min-width: 0; min-height: 36px; max-height: 90px; resize: none; overflow-y: auto; font-family: inherit; font-size: 1rem; border-radius: 25px; border: 1.5px solid #e0e0e0; padding: 13px 16px; box-sizing: border-box; transition: box-shadow 0.2s, border 0.2s;"
+            rows="1"
+          ></textarea>
+        </form>
+        <button type="submit" form="chatForm" class="send-btn"><i class="fas fa-arrow-up"></i></button>
+      </div>
+    </div>
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const mbtiType = urlParams.get("type");
+      const chatTitle = document.getElementById("chatTitle");
+
+      if (mbtiType) {
+        chatTitle.textContent = `${mbtiType}`;
+      }
+
+      const clientId = Date.now();
+
+      const ws = new WebSocket(
+        `ws://localhost:8000/ws/${clientId}/${mbtiType}`
+      );
+
+      const messagesContainer = document.getElementById("messages");
+      const messageInput = document.getElementById("messageText");
+      const chatForm = document.getElementById("chatForm");
+      const imageInput = document.getElementById("imageInput");
+      let responseMessage = null;
+      let receivedText = "";
+      let greetingStreaming = false;
+      let greetingFinished = false;
+      let typingIndicator = null;
+      let isTyping = false;
+
+      function getCurrentTime() {
+        const now = new Date();
+        return (
+          now.getHours().toString().padStart(2, "0") +
+          ":" +
+          now.getMinutes().toString().padStart(2, "0")
+        );
+      }
+
+      setInterval(() => {
+        if (receivedText && responseMessage) {
+          responseMessage.textContent += receivedText.charAt(0);
+          receivedText = receivedText.substring(1);
+          if (
+            greetingStreaming &&
+            receivedText.length === 0 &&
+            !greetingFinished
+          ) {
+            greetingFinished = true;
+            messageInput.disabled = false; // 🔓 입력 가능하게 변경
+            if (typingIndicator) typingIndicator.remove();
+          }
+        }
+      }, 80);
+
+      function createReceivedMessageBox() {
+        const wrapper = document.createElement("div");
+        wrapper.classList.add("received-box");
+        responseMessage = document.createElement("div");
+        responseMessage.classList.add("message-text", "received");
+        const avatar = document.createElement("img");
+        avatar.classList.add("avatar");
+        avatar.src = "/static/img/img.png";
+
+        const time = document.createElement("div");
+        time.className = "received-time";
+        time.textContent = getCurrentTime();
+
+        wrapper.appendChild(avatar);
+        wrapper.appendChild(responseMessage);
+        wrapper.appendChild(time);
+
+        messagesContainer.appendChild(wrapper);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+        return responseMessage;
+      }
+
+      function createSentMessageBox(text) {
+        const wrapper = document.createElement("div");
+        wrapper.classList.add("sent-box");
+        const avatar = document.createElement("img");
+        avatar.classList.add("avatar");
+        avatar.src = "/static/img/my.png";
+
+        const textDiv = document.createElement("div");
+        textDiv.classList.add("message-text", "sent");
+        textDiv.textContent = text;
+
+        const time = document.createElement("div");
+        time.className = "sent-time";
+        time.textContent = getCurrentTime();
+
+        wrapper.appendChild(avatar);
+        wrapper.appendChild(textDiv);
+        wrapper.appendChild(time);
+
+        messagesContainer.appendChild(wrapper);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+
+      window.onload = () => {
+        messageInput.disabled = true;
+        greetingStreaming = true;
+        createReceivedMessageBox();
+        if (mbtiType) {
+          let greeting = '';
+          switch (mbtiType) {
+            case 'ENFP':
+              greeting = "안녕하세요! 저는 생각이 열두 방향으로 튀는, 자유로운 ENFP예요. 말하다가 주제가가 세 번쯤 바뀔 수도 있는데요, 괜찮으시죠? ㅎㅎ 편하게 아무 얘기든 시작해봐요~";
+              break;
+            case 'ISTJ':
+              greeting = "안녕하세요. 저는 원칙과 질서를 중요하게 생각하는 ISTJ예요. 너무 딱딱하게 들렸나요? 그래도 진심이에요. 차분하게 얘기 나눠볼까요?";
+              break;
+            case 'INFP':
+              greeting = "반가워요~ 저는 마음속 이야기를 조심스럽게 꺼내는 INFP입니다. 말하는 데 시간이 좀 걸릴 수도 있지만, 천천히 다가와 주시면 저도 편해져요 :)";
+              break;
+            case 'ENTP':
+              greeting = "어서 오세요~ 저는 ENTP예요. 말이 많다기보단… 생각이 많아서 말이 많아지는 거예요ㅋㅋ 대화하다 보면 갑자기 다른 얘기로 새도 이해해주세요!";
+              break;
+            case 'INFJ':
+              greeting = "안녕하세요. 저는 INFJ예요. 조용해 보일 수 있지만, 마음속은 생각으로 가득해요. 말보단 먼저 공감부터 드릴게요. 편하게 얘기해볼까요?";
+              break;
+            case 'INTJ':
+              greeting = "반갑습니다. 저는 INTJ입니다. 대화 시작 전에 이미 머릿속에 여러 시나리오를 그려봤어요. 예상 못 한 이야기라면 더 반가울 것 같네요.";
+              break;
+            case 'ISFJ':
+              greeting = "안녕하세요~ 저는 ISFJ예요. 말보단 행동으로 표현하는 걸 더 잘해요. 필요하신 게 있다면, 조용히 옆에서 챙겨드릴게요 :)";
+              break;
+            case 'ESFP':
+              greeting = "헬로우~ 저는 ESFP! 지금 이 순간을 즐기는 데 진심인 스타일이에요! 신나게 수다 떨 준비 되셨죠? 그럼 시작해봐요 🎉";
+              break;
+            case 'ESTP':
+              greeting = "반갑습니다! 저는 ESTP예요. 생각보다 행동이 먼저 나가는 편이라, 돌직구일 수도 있어요. 그래도 솔직한 대화엔 자신 있어요. 바로 시작해볼까요?";
+              break;
+            case 'INTP':
+              greeting = "어서 오세요. 저는 INTP입니다. 생각이 꼬리에 꼬리를 물다 보니, 말하다 보면 가끔 저도 길을 잃어요… 궁금하시죠? 한번 이야기 나눠봐요.";
+              break;
+            case 'ENFJ':
+              greeting = "안녕하세요! 저는 ENFJ예요. 사람 이야기를 그냥 지나치지 못하는 성격이거든요 :) 당신의 얘기, 제가 먼저 귀 기울일게요.";
+              break;
+            case 'ESTJ':
+              greeting = "안녕하세요. 저는 ESTJ입니다. 말 돌리는 거, 별로 안 좋아해요. 필요한 얘기 딱 정리해서 나눠볼게요. 책임감은 기본이니까요!";
+              break;
+            case 'ISFP':
+              greeting = "안녕하세요… 저는 ISFP예요. 말보단 느낌을 더 중요하게 생각해요. 조용하지만, 마음은 누구보다 따뜻하답니다 :)";
+              break;
+            case 'ESFJ':
+              greeting = "안녕하세요~ 저는 ESFJ입니다! 어색한 분위기엔 누구보다 예민한 편이에요ㅎㅎ 커피 한 잔 나누듯, 편하게 얘기 나눠요~";
+              break;
+            case 'ENTJ':
+              greeting = "반갑습니다. 저는 ENTJ예요. 대화도 전략적으로 접근하는 스타일이에요. 원래는 수다를 안 좋아하지만… 오늘은 좀 예외로 해볼까요?";
+              break;
+            case 'ISTP':
+              greeting = "안녕하세요. 저는 ISTP예요. 말수는 많지 않지만, 필요한 말은 확실히 해요. 감정 표현은 조금 서툴 수 있어요. 대신 진심은 숨기지 않아요.";
+              break;
+            default:
+              greeting = `${mbtiType} 캐릭터 챗봇입니다. 대화를 시작해주세요.`;
+          }
+          receivedText += greeting;
+        } else {
+          receivedText += "안녕하세요! 챗봇이에요!";
+        }
+      };
+
+      ws.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+
+          if (data.type === "user") {
+            if (data.content.startsWith("You wrote:")) {
+              const userText = data.content.replace("You wrote:", "").trim();
+              createSentMessageBox(userText);
+              messageInput.disabled = true;
+            }
+          } else if (data.type === "stream") {
+            if (!isTyping) {
+              isTyping = true;
+              responseMessage = createReceivedMessageBox();
+              responseMessage.textContent = "";
+            }
+            responseMessage.textContent += data.content;
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+          } else if (data.type === "end") {
+            isTyping = false;
+            messageInput.disabled = false;
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+          }
+        } catch (error) {
+          console.error("메시지 처리 중 오류:", error);
+          // JSON 형식이 아닌 경우 기존 방식으로 처리 (이전 버전과의 호환성 유지)
+          const messageData = event.data.trim();
+
+          if (messageData.startsWith("You wrote:")) {
+            responseMessage = null;
+            messageInput.disabled = true;
+            const userText = messageData.replace("You wrote:", "").trim();
+            createSentMessageBox(userText);
+          } else {
+            if (!responseMessage) {
+              messageInput.disabled = true;
+              responseMessage = createReceivedMessageBox();
+              responseMessage.textContent = "";
+            }
+            responseMessage.textContent += messageData;
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+          }
+        }
+      };
+
+      chatForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        if (messageInput.disabled || !messageInput.value.trim()) return;
+        ws.send(messageInput.value);
+        messageInput.value = "";
+      });
+
+      imageInput.addEventListener("change", (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          alert(
+            "이미지 업로드 기능은 데모 UI입니다. 실제 업로드 처리는 서버 구현 필요!"
+          );
+        }
+      });
+
+      const messageText = document.getElementById('messageText');
+      messageText.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+        this.scrollTop = this.scrollHeight;
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=375, initial-scale=1.0" />
+    <title>MBTI 캐릭터 선택</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+    <style>
+      body {
+        background: #fff;
+        margin: 0;
+        padding: 0;
+        font-family: 'Pretendard', 'Inter', 'Segoe UI', sans-serif;
+      }
+      .container {
+        width: 375px;
+        min-height: 100vh;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px 10px;
+        padding: 40px 0 20px 0;
+        background: #fff;
+        border-radius: 32px;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        justify-items: center;
+      }
+      .mbti-card {
+        width: 155px;
+        height: 92px;
+        background: linear-gradient(135deg, #f8f4ed 80%, #fdf6e3 100%);
+        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.10);
+        border-radius: 15px;
+        overflow: visible;
+        cursor: pointer;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        transition: box-shadow 0.22s, transform 0.13s, background 0.18s;
+        position: relative;
+      }
+      .mbti-card:hover {
+        box-shadow: 0px 8px 24px rgba(0,0,0,0.16);
+        background: linear-gradient(135deg, #fdf6e3 70%, #f8f4ed 100%);
+        transform: translateY(-2px) scale(1.03);
+      }
+      .mbti-card img {
+        width: 60px;
+        height: 90px;
+        margin-left: 12px;
+        margin-right: 0;
+        object-fit: contain;
+        /* box-shadow: 0 2px 8px rgba(0,0,0,0.07); */
+        /* border-radius: 10px; */
+      }
+      .mbti-label {
+        margin-left: 6px;
+        margin-right: 0;
+        padding: 0;
+        color: #211816;
+        font-size: 32px;
+        font-family: 'Pretendard', 'Inter', 'Segoe UI', sans-serif;
+        font-weight: 700;
+        line-height: 22px;
+        text-align: left;
+        flex: 1;
+        letter-spacing: -1px;
+        text-shadow: 0 1px 0 #fff8, 0 2px 8px #f8f4ed;
+        display: flex;
+        align-items: center;
+        height: 100%;
+      }
+      /* 왼쪽 열(홀수번째) 카드의 mbti-label만 margin-left를 0px로 */
+      .mbti-card:nth-child(odd) .mbti-label {
+        margin-left: 0px;
+      }
+      .title {
+        text-align: center;
+        color: #211816;
+        font-size: 1.3rem;
+        font-family: 'Pretendard', 'Inter', 'Segoe UI', sans-serif;
+        font-weight: 600;
+        margin: 32px 0 12px 0;
+      }
+      .mbti-badge {
+        position: absolute;
+        top: -32px;
+        left: 50%;
+        transform: translateX(-50%) scale(0.95);
+        background: rgba(253,219,175,0.96);
+        color: #211816;
+        padding: 3px 12px;
+        border-radius: 13px;
+        font-size: 0.89rem;
+        font-weight: 600;
+        box-shadow: 0 4px 16px #fddbaf55, 0 1.5px 0 #fff8;
+        border: 1px solid #f8c472;
+        white-space: nowrap;
+        z-index: 20;
+        pointer-events: none;
+        opacity: 0;
+        transition:
+          opacity 0.22s cubic-bezier(.4,0,.2,1),
+          top 0.22s cubic-bezier(.4,0,.2,1),
+          transform 0.22s cubic-bezier(.4,0,.2,1),
+          box-shadow 0.22s;
+      }
+      .mbti-card:hover .mbti-badge {
+        opacity: 1;
+        top: -38px;
+        transform: translateX(-50%) scale(1.04);
+        box-shadow: 0 8px 24px #fddbaf99, 0 2px 8px #fff8;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="position: relative; width: 375px; margin: 24px auto 0 auto; height: 48px; margin-bottom: 18px;">
+      <span style="display: block; text-align: center; font-family: 'Pretendard', 'Inter', 'Segoe UI', sans-serif; font-size: 1.3rem; font-weight: 600; color: #211816; line-height: 48px;">대화할 MBTI 친구를 고르세요</span>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; width: 375px; margin: 0 auto; gap: 24px; justify-content: center; padding: 25px 0 20px 0; overflow: visible;">
+      <div class="mbti-card" data-type="ENFP"><img src="static/img/ENFP.png" alt="ENFP"><div class="mbti-label">ENFP</div></div>
+      <div class="mbti-card" data-type="INFP"><img src="static/img/INFP.png" alt="INFP"><div class="mbti-label">INFP</div></div>
+      <div class="mbti-card" data-type="ENFJ"><img src="static/img/ENFJ.png" alt="ENFJ"><div class="mbti-label">ENFJ</div></div>
+      <div class="mbti-card" data-type="INFJ"><img src="static/img/INFJ.png" alt="INFJ"><div class="mbti-label">INFJ</div></div>
+      <div class="mbti-card" data-type="ENTJ"><img src="static/img/ENTJ.png" alt="ENTJ"><div class="mbti-label">ENTJ</div></div>
+      <div class="mbti-card" data-type="INTJ"><img src="static/img/INTJ.png" alt="INTJ"><div class="mbti-label">INTJ</div></div>
+      <div class="mbti-card" data-type="ENTP"><img src="static/img/ENTP.png" alt="ENTP"><div class="mbti-label">ENTP</div></div>
+      <div class="mbti-card" data-type="INTP"><img src="static/img/INTP.png" alt="INTP"><div class="mbti-label">INTP</div></div>
+      <div class="mbti-card" data-type="ESFP"><img src="static/img/ESFP.png" alt="ESFP"><div class="mbti-label">ESFP</div></div>
+      <div class="mbti-card" data-type="ISFP"><img src="static/img/ISFP.png" alt="ISFP"><div class="mbti-label">ISFP</div></div>
+      <div class="mbti-card" data-type="ESFJ"><img src="static/img/ESFJ.png" alt="ESFJ"><div class="mbti-label">ESFJ</div></div>
+      <div class="mbti-card" data-type="ISFJ"><img src="static/img/ISFJ.png" alt="ISFJ"><div class="mbti-label">ISFJ</div></div>
+      <div class="mbti-card" data-type="ESTP"><img src="static/img/ESTP.png" alt="ESTP"><div class="mbti-label">ESTP</div></div>
+      <div class="mbti-card" data-type="ISTP"><img src="static/img/ISTP.png" alt="ISTP"><div class="mbti-label">ISTP</div></div>
+      <div class="mbti-card" data-type="ESTJ"><img src="static/img/ESTJ.png" alt="ESTJ"><div class="mbti-label">ESTJ</div></div>
+      <div class="mbti-card" data-type="ISTJ"><img src="static/img/ISTJ.png" alt="ISTJ"><div class="mbti-label">ISTJ</div></div>
+    </div>
+    <script>
+      // MBTI 별명 데이터
+      const mbtiNicknames = {
+        ENFP: "자유로운 하이텐션",
+        ISTJ: "똑부러진 규칙러",
+        INFP: "감성 충만 몽상러",
+        ENTP: "입폭발 드립러",
+        INFJ: "조용한 공감러",
+        INTJ: "전략적 예측러",
+        ISFJ: "배려심 깊은 조용러",
+        ESFP: "흥 많은 핵인싸",
+        ESTP: "직진형 반응러",
+        INTP: "호기심 천재",
+        ENFJ: "따뜻한 오지라퍼",
+        ESTJ: "단도직입 현실러",
+        ISFP: "조용한 감성러",
+        ESFJ: "친절한 인싸 케어러",
+        ENTJ: "정리왕 리더형",
+        ISTP: "쿨한 실용러"
+      };
+      document.querySelectorAll(".mbti-card").forEach((card) => {
+        card.addEventListener("mouseenter", function () {
+          const mbti = this.getAttribute("data-type");
+          let badge = this.querySelector('.mbti-badge');
+          if (!badge) {
+            badge = document.createElement('div');
+            badge.className = 'mbti-badge';
+            badge.textContent = mbtiNicknames[mbti];
+            this.appendChild(badge);
+            setTimeout(() => { badge.style.opacity = 1; }, 10);
+          }
+        });
+        card.addEventListener("mouseleave", function () {
+          const badge = this.querySelector('.mbti-badge');
+          if (badge) badge.remove();
+        });
+        card.addEventListener("click", () => {
+          const mbtiType = card.getAttribute("data-type");
+          window.location.href = `/chat?type=${mbtiType}`;
+        });
+      });
+    </script>
+  </body>
+</html>
